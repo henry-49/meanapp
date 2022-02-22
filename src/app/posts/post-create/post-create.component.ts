@@ -1,4 +1,6 @@
+import { PostsService } from './../posts.service';
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Post } from '../post.module';
 
 @Component({
@@ -6,22 +8,27 @@ import { Post } from '../post.module';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.scss'],
 })
-export class PostCreateComponent implements OnInit{
-  enteredTitle = "";
-  enteredContent = "";
+export class PostCreateComponent implements OnInit {
+  enteredTitle = '';
+  enteredContent = '';
   // eventEmitter always have to @Output declearator
-  @Output() postCreated = new EventEmitter<Post>();
+  // @Output() postCreated = new EventEmitter<Post>();
   newPost: string = 'NO CONTENT';
+  postTitleError: string = "Please enter a post title";
+  postContentError: string = "Post content can't be empty";
 
-  constructor() {}
+  constructor(public postsService: PostsService) {}
 
-  onAddPost() {
-    const post: Post = {
-      title: this.enteredTitle,
-      content: this.enteredContent,
-    };
-      this.postCreated.emit(post);
-
+// on the form their is a value property
+  onAddPost(form: NgForm) {
+    // error handle
+    if(form.invalid) return;
+    this.postsService.addPost(form.value.title, form.value.content);
+    // const post: Post = {
+    //   title: form.value.title,
+    //   content: form.value.content,
+    // };
+    // this.postCreated.emit(post);
   }
 
   // get value upon a click

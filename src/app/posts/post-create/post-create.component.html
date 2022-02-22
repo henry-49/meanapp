@@ -1,16 +1,31 @@
 <mat-card>
-  <mat-form-field>
+  <!-- Using local variable to bind, give access to ngForm Object-->
+  <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+     <mat-form-field>
   <!-- setting and getting of value with ngModel an angula feature called directive-->
-    <input matInput type="text" [(ngModel)]="enteredTitle"/>
+    <input matInput
+    type="text"
+    name="title"
+    ngModel
+    required
+    minlength="3"
+    #title="ngModel"/>
+    <mat-error *ngIf="title.invalid">{{postTitleError}}</mat-error>
   </mat-form-field>
   <mat-form-field>
-    <textarea matInput rows="4" [(ngModel)]="enteredContent"></textarea>
+    <textarea matInput rows="4"
+     name="content" ngModel
+     required
+     #content="ngModel"></textarea>
+    <mat-error *ngIf="content.invalid">{{postContentError}}</mat-error>
   </mat-form-field>
   <button
   mat-raised-button
   color="primary"
-  (click)="onAddPost()"
+  type="submit"
   >Add Post</button>
+  </form>
+
 </mat-card>
 
 <!-- manually setting of the text area an getting a reference to it-->
